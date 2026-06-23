@@ -81,6 +81,10 @@ function startLevel(level) {
   state.boardSize = chooseBoardSize();
   state.pieceSize = Math.floor(state.boardSize / N);
   state.boardSize = state.pieceSize * N; // adjust to be exact multiple
+  // Pieces in the rail show at a fixed comfy size (touch-friendly + fits the rail)
+  state.railPieceSize = Math.min(state.pieceSize, 80);
+  // Levels with grid >= 4 get random initial rotations for extra challenge.
+  state.useRotation = N >= 4;
 
   $("#game-title").textContent = `${level.title} · ${N}×${N}`;
   $("#game-progress").textContent = `0 / ${total}`;
@@ -102,26 +106,36 @@ function startLevel(level) {
     }
   }
 
-  // Build pieces
+  // Build pieces (sized for the rail)
   state.pieces = [];
   for (let r = 0; r < N; r++) {
     for (let c = 0; c < N; c++) {
       const el = document.createElement("div");
       el.className = "piece in-rail";
-      el.style.width = state.pieceSize + "px";
-      el.style.height = state.pieceSize + "px";
+      el.style.width = state.railPieceSize + "px";
+      el.style.height = state.railPieceSize + "px";
       el.style.backgroundImage = `url('${level.image}')`;
-      el.style.backgroundSize = `${state.boardSize}px ${state.boardSize}px`;
-      el.style.backgroundPosition = `-${c * state.pieceSize}px -${r * state.pieceSize}px`;
+      // Use the rail size for the slice so each piece shows its part of the image
+      const sliceTotal = state.railPieceSize * N;
+      el.style.backgroundSize = `${sliceTotal}px ${sliceTotal}px`;
+      el.style.backgroundPosition = `-${c * state.railPieceSize}px -${r * state.railPieceSize}px`;
       attachDrag(el);
-      state.pieces.push({ row: r, col: c, el, placed: false });
+      // Initial rotation (0 unless we're in rotation mode)
+      const rotation = state.useRotation ? (Math.floor(Math.random() * 4) * 90) : 0;
+      const piece = { row: r, col: c, el, placed: false, rotation };
+      applyRotation(piece);
+      if (state.useRotation) el.classList.add("rotatable");
+      state.pieces.push(piece);
     }
   }
 
   // Shuffle and split between two rails
   shufflePieces();
-
   showView("game");
+}
+
+function applyRotation(piece) {
+  piece.el.style.transform = `rotate(${piece.rotation}deg)`;
 }
 
 function shufflePieces() {
@@ -161,6 +175,8 @@ function attachDrag(el) {
   el.addEventListener("pointerdown", onPointerDown);
 }
 
+const DRAG_THRESHOLD = 8; // px movement before we consider it a drag
+
 function onPointerDown(e) {
   if (state.won) return;
   e.preventDefault();
@@ -173,11 +189,11 @@ function onPointerDown(e) {
     offsetX: e.clientX - rect.left,
     offsetY: e.clientY - rect.top,
     pointerId: e.pointerId,
+    startX: e.clientX,
+    startY: e.clientY,
+    moved: false,
   };
-  el.setPointerCapture(e.pointerId);
-  el.classList.add("dragging");
-  el.style.left = (e.clientX - state.drag.offsetX) + "px";
-  el.style.top = (e.clientY - state.drag.offsetY) + "px";
+  try { el.setPointerCapture(e.pointerId); } catch {}
   el.addEventListener("pointermove", onPointerMove);
   el.addEventListener("pointerup", onPointerUp);
   el.addEventListener("pointercancel", onPointerUp);
@@ -186,6 +202,23 @@ function onPointerDown(e) {
 function onPointerMove(e) {
   if (!state.drag) return;
   const piece = state.pieces[state.drag.pieceIndex];
+  // Decide drag vs tap based on movement threshold
+  if (!state.drag.moved) {
+    const dx = e.clientX - state.drag.startX;
+    const dy = e.clientY - state.drag.startY;
+    if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return; // still might be a tap
+    state.drag.moved = true;
+    // Switch to dragging — grow to board piece size
+    piece.el.classList.add("dragging");
+    piece.el.style.width = state.pieceSize + "px";
+    piece.el.style.height = state.pieceSize + "px";
+    const totalSlice = state.pieceSize * state.level.grid;
+    piece.el.style.backgroundSize = `${totalSlice}px ${totalSlice}px`;
+    piece.el.style.backgroundPosition = `-${piece.col * state.pieceSize}px -${piece.row * state.pieceSize}px`;
+    // Recenter the drag offset so the pointer stays roughly at the same spot
+    state.drag.offsetX = state.pieceSize / 2;
+    state.drag.offsetY = state.pieceSize / 2;
+  }
   piece.el.style.left = (e.clientX - state.drag.offsetX) + "px";
   piece.el.style.top = (e.clientY - state.drag.offsetY) + "px";
 }
@@ -193,29 +226,58 @@ function onPointerMove(e) {
 function onPointerUp(e) {
   if (!state.drag) return;
   const piece = state.pieces[state.drag.pieceIndex];
-  piece.el.releasePointerCapture(e.pointerId);
+  try { piece.el.releasePointerCapture(e.pointerId); } catch {}
   piece.el.removeEventListener("pointermove", onPointerMove);
   piece.el.removeEventListener("pointerup", onPointerUp);
   piece.el.removeEventListener("pointercancel", onPointerUp);
-  // Try to snap to its target cell on the board
+
+  if (!state.drag.moved) {
+    // It was a tap, not a drag — rotate the piece 90°
+    if (state.useRotation) {
+      piece.rotation = (piece.rotation + 90) % 360;
+      applyRotation(piece);
+    }
+    state.drag = null;
+    return;
+  }
+
+  // It was a drag — try to snap to the target cell
   const targetCell = getCellAt(piece.row, piece.col);
   const targetRect = targetCell.getBoundingClientRect();
   const pieceRect = piece.el.getBoundingClientRect();
   const dx = (pieceRect.left + pieceRect.width / 2) - (targetRect.left + targetRect.width / 2);
   const dy = (pieceRect.top + pieceRect.height / 2) - (targetRect.top + targetRect.height / 2);
   const dist = Math.hypot(dx, dy);
-  // Snap threshold: 60% of piece size
-  if (dist < state.pieceSize * 0.6) {
+  const correctRotation = piece.rotation === 0;
+  if (dist < state.pieceSize * 0.6 && correctRotation) {
     placePiece(piece);
   } else {
-    // Return to rail (clear inline drag styling)
+    // Return to rail — restore rail size
     piece.el.classList.remove("dragging");
     piece.el.style.position = "";
     piece.el.style.left = "";
     piece.el.style.top = "";
-    // Already in DOM in its rail; no parent change needed
+    piece.el.style.width = state.railPieceSize + "px";
+    piece.el.style.height = state.railPieceSize + "px";
+    const railTotal = state.railPieceSize * state.level.grid;
+    piece.el.style.backgroundSize = `${railTotal}px ${railTotal}px`;
+    piece.el.style.backgroundPosition = `-${piece.col * state.railPieceSize}px -${piece.row * state.railPieceSize}px`;
+    // Wiggle to hint at wrong rotation if applicable
+    if (dist < state.pieceSize * 0.6 && !correctRotation) wiggle(piece.el);
   }
   state.drag = null;
+}
+
+function wiggle(el) {
+  el.animate(
+    [
+      { transform: el.style.transform + " translateX(-6px)" },
+      { transform: el.style.transform + " translateX(6px)" },
+      { transform: el.style.transform + " translateX(-4px)" },
+      { transform: el.style.transform },
+    ],
+    { duration: 220, easing: "ease-in-out" }
+  );
 }
 
 function getCellAt(r, c) {
@@ -224,18 +286,24 @@ function getCellAt(r, c) {
 
 function placePiece(piece) {
   piece.placed = true;
-  piece.el.classList.remove("dragging", "in-rail", "hint-glow");
+  piece.el.classList.remove("dragging", "in-rail", "hint-glow", "rotatable");
   piece.el.classList.add("in-board");
   piece.el.style.position = "";
   piece.el.style.left = "";
   piece.el.style.top = "";
-  // Move piece DOM into target cell, occupy it
+  // Resize to full board cell size; transform back to 0deg
+  piece.rotation = 0;
+  piece.el.style.transform = "";
+  // Move piece DOM into target cell
   const cell = getCellAt(piece.row, piece.col);
   cell.classList.add("filled");
   cell.innerHTML = "";
   cell.appendChild(piece.el);
   piece.el.style.width = "100%";
   piece.el.style.height = "100%";
+  const totalSlice = state.pieceSize * state.level.grid;
+  piece.el.style.backgroundSize = `${totalSlice}px ${totalSlice}px`;
+  piece.el.style.backgroundPosition = `-${piece.col * state.pieceSize}px -${piece.row * state.pieceSize}px`;
   updateProgress();
   if (state.pieces.every((p) => p.placed)) {
     setTimeout(triggerWin, 250);
@@ -257,9 +325,8 @@ function giveHint() {
   if (state.won || hintActive) return;
   hintActive = true;
   $("#hint-btn").disabled = true;
-  // For each unplaced piece, temporarily render the full image in its target cell.
-  // We do this by adding a translucent "ghost" element with the full image cropped.
-  const N = state.level.grid;
+  // For each unplaced piece, drop a translucent "ghost" on its target cell
+  // that fades from full opacity to 0 over the 5-second hint window.
   const ghosts = [];
   state.pieces.forEach((p) => {
     if (p.placed) return;
@@ -272,10 +339,14 @@ function giveHint() {
     ghost.style.backgroundSize = `${state.boardSize}px ${state.boardSize}px`;
     ghost.style.backgroundPosition = `-${p.col * state.pieceSize}px -${p.row * state.pieceSize}px`;
     ghost.style.opacity = "0.85";
+    ghost.style.transition = "opacity 5s linear";
     cell.appendChild(ghost);
+    // Force layout, then trigger the fade
+    void ghost.offsetWidth;
+    ghost.style.opacity = "0";
     ghosts.push(ghost);
   });
-  // Glow the rail pieces so kid can find them
+  // Pulse-glow the rail pieces while the hint is up
   state.pieces.forEach((p) => {
     if (!p.placed) p.el.classList.add("hint-glow");
   });
@@ -303,18 +374,35 @@ function triggerWin() {
 function renderDancers() {
   const container = $("#dancers");
   container.innerHTML = "";
-  // Sprinkle a mix of princess-y emojis dancing in random positions
-  const cast = ["👸", "🦄", "🎀", "💃", "✨", "👑", "💖", "🌸", "🩰", "🍰"];
-  const n = 14;
-  for (let i = 0; i < n; i++) {
-    const d = document.createElement("div");
+  const dancerImages = [
+    "images/dancer1.png", "images/dancer2.png", "images/dancer3.png",
+    "images/dancer4.png", "images/dancer5.png", "images/dancer6.png", "images/dancer7.png",
+  ];
+  // Sprinkle the real dancing Barbies + a few sparkle emojis around them
+  const N_DANCERS = 12;
+  for (let i = 0; i < N_DANCERS; i++) {
+    const d = document.createElement("img");
     d.className = "dancer";
-    d.textContent = cast[Math.floor(Math.random() * cast.length)];
-    d.style.left = (Math.random() * 88) + "%";
+    d.src = dancerImages[i % dancerImages.length];
+    d.alt = "";
+    d.style.left = (Math.random() * 85) + "%";
     d.style.top = (Math.random() * 70) + "%";
     d.style.animationDelay = (Math.random() * 0.7) + "s";
-    d.style.fontSize = (3 + Math.random() * 2) + "rem";
+    d.style.width = (90 + Math.random() * 60) + "px";
+    d.style.zIndex = Math.floor(Math.random() * 5);
     container.appendChild(d);
+  }
+  // Sprinkle a few sparkle emojis in front of/behind the dancers
+  const sparkles = ["✨", "🎀", "💖", "⭐"];
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement("div");
+    s.className = "dancer dancer-sparkle";
+    s.textContent = sparkles[i % sparkles.length];
+    s.style.left = (Math.random() * 90) + "%";
+    s.style.top = (Math.random() * 80) + "%";
+    s.style.animationDelay = (Math.random() * 0.7) + "s";
+    s.style.fontSize = (2 + Math.random() * 1.5) + "rem";
+    container.appendChild(s);
   }
 }
 

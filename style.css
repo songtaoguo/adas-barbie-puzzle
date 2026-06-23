@@ -116,18 +116,28 @@ main {
 }
 
 .pieces-rail {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-  gap: 6px;
-  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 10px;
+  padding: 10px;
   background: rgba(255,255,255,0.55);
   border: 3px dashed #ec407a;
   border-radius: 16px;
   min-height: 200px;
+  max-height: 70vh;
   width: 100%;
-  max-width: 220px;
+  max-width: 240px;
   box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #ec407a #fce4ec;
 }
+.pieces-rail::-webkit-scrollbar { width: 8px; }
+.pieces-rail::-webkit-scrollbar-track { background: #fce4ec; border-radius: 4px; }
+.pieces-rail::-webkit-scrollbar-thumb { background: #ec407a; border-radius: 4px; }
 
 .board-wrap {
   display: flex;
@@ -160,8 +170,11 @@ main {
   -webkit-user-drag: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   touch-action: none;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.15s ease-out;
 }
-.piece.in-rail { position: relative; }
+.piece.in-rail { /* default flex item */ }
 .piece.in-board { border-color: transparent; box-shadow: none; }
 .piece.dragging {
   position: fixed !important;
@@ -169,12 +182,32 @@ main {
   cursor: grabbing;
   pointer-events: none;
   opacity: 0.9;
-  transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  transition: none;
 }
 .piece.hint-glow {
   animation: pulse 0.8s ease-in-out infinite;
 }
+
+/* Rotate hint (small icon on hover) */
+.piece.rotatable::after {
+  content: "↻";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(255,255,255,0.9);
+  color: #ad1457;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  pointer-events: none;
+}
+.piece.in-board::after { display: none; }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,0.7); }
   50%      { box-shadow: 0 0 0 12px rgba(255,193,7,0); }
@@ -220,18 +253,23 @@ main {
 
 .dancers {
   position: relative;
-  height: 320px;
-  margin: 30px auto;
-  max-width: 800px;
+  height: 380px;
+  margin: 20px auto;
+  max-width: 900px;
 }
 .dancer {
   position: absolute;
-  font-size: 4rem;
+  pointer-events: none;
   animation: dance 0.7s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+.dancer-sparkle {
+  font-size: 2.5rem;
+  filter: none;
 }
 @keyframes dance {
-  0%, 100% { transform: translateY(0) rotate(-12deg); }
-  50%      { transform: translateY(-40px) rotate(12deg); }
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50%      { transform: translateY(-28px) rotate(8deg); }
 }
 
 .win-buttons {
