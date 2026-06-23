@@ -3,12 +3,11 @@
 // ---------- Levels ----------
 // Each level: image + grid size (NxN). Progress from easy (3x3) to harder (6x6).
 const LEVELS = [
-  { id: 1, image: "images/crown.svg",    title: "Royal Crown",    grid: 3 },
-  { id: 2, image: "images/castle.svg",   title: "Pink Castle",    grid: 3 },
-  { id: 3, image: "images/wand.svg",     title: "Magic Wand",     grid: 4 },
-  { id: 4, image: "images/unicorn.svg",  title: "Rainbow Unicorn",grid: 4 },
-  { id: 5, image: "images/princess.svg", title: "Pretty Princess",grid: 5 },
-  { id: 6, image: "images/teaparty.svg", title: "Tea Party",      grid: 5 },
+  { id: 1, image: "images/barbie5.jpg", title: "Welcome to Barbieland", grid: 3 },
+  { id: 2, image: "images/barbie1.jpg", title: "Three Best Friends",    grid: 3 },
+  { id: 3, image: "images/barbie3.jpg", title: "Pink Coat Style",       grid: 4 },
+  { id: 4, image: "images/barbie4.jpg", title: "Roses & Curls",         grid: 4 },
+  { id: 5, image: "images/barbie2.jpg", title: "Pink Power Suit",       grid: 5 },
 ];
 
 // ---------- Storage (completed levels) ----------
