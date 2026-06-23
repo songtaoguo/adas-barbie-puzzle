@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#f8bbd0"/>
+    </radialGradient>
+    <linearGradient id="starGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff59d"/>
+      <stop offset="100%" stop-color="#f57f17"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <!-- Background sparkles spreading from center -->
+  <text x="80" y="100" font-size="40" fill="#e91e63">✨</text>
+  <text x="500" y="100" font-size="36" fill="#9c27b0">✨</text>
+  <text x="80" y="500" font-size="38" fill="#42a5f5">✨</text>
+  <text x="500" y="500" font-size="34" fill="#66bb6a">✨</text>
+  <text x="40" y="280" font-size="30" fill="#ec407a">✦</text>
+  <text x="540" y="280" font-size="32" fill="#ffd54f">✦</text>
+  <text x="280" y="60" font-size="36" fill="#ffd54f">★</text>
+  <text x="280" y="570" font-size="32" fill="#ec407a">★</text>
+  <!-- Hearts scattered -->
+  <path d="M 100 280 C 100 270 110 260 124 270 C 138 260 148 270 148 280 C 148 295 124 315 124 315 C 124 315 100 295 100 280 Z" fill="#e91e63" opacity="0.7"/>
+  <path d="M 460 320 C 460 312 468 304 480 312 C 492 304 500 312 500 320 C 500 333 480 350 480 350 C 480 350 460 333 460 320 Z" fill="#ec407a" opacity="0.6"/>
+  <path d="M 150 430 C 150 422 158 414 170 422 C 182 414 190 422 190 430 C 190 442 170 458 170 458 C 170 458 150 442 150 430 Z" fill="#f48fb1" opacity="0.7"/>
+  <!-- Wand stick -->
+  <rect x="290" y="280" width="20" height="240" rx="10" fill="#9c27b0" stroke="#4a148c" stroke-width="3"/>
+  <!-- Wand grip (purple stripes) -->
+  <rect x="290" y="450" width="20" height="14" fill="#ffd54f"/>
+  <rect x="290" y="470" width="20" height="14" fill="#ffd54f"/>
+  <rect x="290" y="490" width="20" height="14" fill="#ffd54f"/>
+  <!-- Big star at top of wand -->
+  <polygon points="300,140 320,200 380,200 332,238 350,300 300,260 250,300 268,238 220,200 280,200" fill="url(#starGrad)" stroke="#bf360c" stroke-width="4"/>
+  <!-- Star inner highlight -->
+  <polygon points="300,165 312,200 348,200 320,222 330,260 300,238 270,260 280,222 252,200 288,200" fill="#fff9c4" opacity="0.6"/>
+  <!-- Gem in center -->
+  <circle cx="300" cy="220" r="14" fill="#e91e63"/>
+  <circle cx="298" cy="217" r="5" fill="#fff" opacity="0.7"/>
+  <!-- Sparkle trail around star -->
+  <text x="200" y="160" font-size="26" fill="#ec407a">✦</text>
+  <text x="380" y="140" font-size="24" fill="#42a5f5">✦</text>
+  <text x="180" y="280" font-size="22" fill="#ffd54f">✦</text>
+  <text x="400" y="280" font-size="22" fill="#9c27b0">✦</text>
+  <text x="240" y="100" font-size="20" fill="#ffd54f">✧</text>
+  <text x="360" y="100" font-size="20" fill="#ffd54f">✧</text>
+</svg>

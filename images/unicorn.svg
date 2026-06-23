@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e1bee7"/>
+      <stop offset="100%" stop-color="#fce4ec"/>
+    </linearGradient>
+    <linearGradient id="rainbow1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e91e63"/>
+      <stop offset="33%" stop-color="#9c27b0"/>
+      <stop offset="66%" stop-color="#3f51b5"/>
+      <stop offset="100%" stop-color="#00bcd4"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#sky)"/>
+  <!-- Background stars -->
+  <text x="50" y="80" font-size="34" fill="#fff59d">★</text>
+  <text x="530" y="100" font-size="30" fill="#ffe082">✦</text>
+  <text x="80" y="200" font-size="24" fill="#fff" opacity="0.8">✧</text>
+  <text x="510" y="180" font-size="28" fill="#fff" opacity="0.8">✦</text>
+  <text x="40" y="400" font-size="22" fill="#fff" opacity="0.7">✦</text>
+  <text x="540" y="380" font-size="26" fill="#fff59d">✧</text>
+  <text x="60" y="520" font-size="20" fill="#fff" opacity="0.7">✦</text>
+  <text x="520" y="540" font-size="24" fill="#fff59d">★</text>
+  <!-- Hearts background -->
+  <path d="M 130 320 C 130 312 138 304 150 312 C 162 304 170 312 170 320 C 170 332 150 348 150 348 C 150 348 130 332 130 320 Z" fill="#f48fb1" opacity="0.6"/>
+  <path d="M 440 480 C 440 472 448 464 460 472 C 472 464 480 472 480 480 C 480 492 460 510 460 510 C 460 510 440 492 440 480 Z" fill="#ce93d8" opacity="0.6"/>
+  <!-- Body of unicorn (white with pink highlights) -->
+  <ellipse cx="300" cy="380" rx="160" ry="100" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <!-- Legs -->
+  <rect x="200" y="430" width="22" height="100" rx="8" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <rect x="240" y="440" width="22" height="90" rx="8" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <rect x="340" y="440" width="22" height="90" rx="8" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <rect x="378" y="430" width="22" height="100" rx="8" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <!-- Hooves -->
+  <rect x="196" y="520" width="30" height="12" rx="4" fill="#9c27b0"/>
+  <rect x="236" y="520" width="30" height="12" rx="4" fill="#9c27b0"/>
+  <rect x="336" y="520" width="30" height="12" rx="4" fill="#9c27b0"/>
+  <rect x="374" y="520" width="30" height="12" rx="4" fill="#9c27b0"/>
+  <!-- Tail (rainbow) -->
+  <path d="M 460 360 Q 510 340 530 380 Q 540 420 510 440 Q 480 430 470 410 Q 460 390 460 360" fill="url(#rainbow1)"/>
+  <!-- Head -->
+  <ellipse cx="180" cy="260" rx="80" ry="70" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <!-- Snout -->
+  <ellipse cx="120" cy="290" rx="35" ry="25" fill="#ffffff" stroke="#f48fb1" stroke-width="3"/>
+  <!-- Nostril -->
+  <ellipse cx="108" cy="295" rx="4" ry="6" fill="#f48fb1"/>
+  <!-- Smile -->
+  <path d="M 100 305 Q 110 315 125 305" stroke="#f48fb1" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Eye -->
+  <ellipse cx="175" cy="245" rx="10" ry="14" fill="#1a1a1a"/>
+  <ellipse cx="178" cy="240" rx="3" ry="4" fill="#ffffff"/>
+  <!-- Eyelashes -->
+  <line x1="165" y1="232" x2="160" y2="225" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="172" y1="228" x2="170" y2="220" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <line x1="183" y1="228" x2="186" y2="220" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/>
+  <!-- Cheek -->
+  <ellipse cx="155" cy="280" rx="14" ry="9" fill="#f48fb1" opacity="0.6"/>
+  <!-- Ear -->
+  <path d="M 220 195 L 245 165 L 255 200 Z" fill="#ffffff" stroke="#f48fb1" stroke-width="2"/>
+  <path d="M 226 195 L 245 178 L 250 198 Z" fill="#f48fb1"/>
+  <!-- HORN -->
+  <path d="M 175 195 L 185 125 L 195 195 Z" fill="#ffd54f" stroke="#bf360c" stroke-width="2"/>
+  <path d="M 180 180 L 185 170 L 190 180" stroke="#bf360c" stroke-width="1.5" fill="none"/>
+  <path d="M 180 165 L 185 155 L 190 165" stroke="#bf360c" stroke-width="1.5" fill="none"/>
+  <!-- Rainbow mane -->
+  <path d="M 230 220 Q 280 180 320 220 Q 320 260 290 250 Q 270 270 230 260 Z" fill="#e91e63"/>
+  <path d="M 280 240 Q 330 220 360 270 Q 360 310 320 290 Q 300 310 280 280 Z" fill="#ab47bc"/>
+  <path d="M 330 280 Q 380 270 400 320 Q 400 360 360 340 Q 340 360 330 320 Z" fill="#42a5f5"/>
+  <path d="M 380 320 Q 420 320 430 370 Q 430 400 400 390 Q 380 400 380 360 Z" fill="#66bb6a"/>
+  <!-- Sparkle on horn -->
+  <text x="200" y="155" font-size="22" fill="#fff">✨</text>
+</svg>

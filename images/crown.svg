@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0%" stop-color="#fce4ec"/>
+      <stop offset="100%" stop-color="#f8bbd0"/>
+    </radialGradient>
+    <linearGradient id="crown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd54f"/>
+      <stop offset="100%" stop-color="#f57f17"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <!-- Sparkles in background -->
+  <text x="60" y="100" font-size="40" fill="#fff59d">✦</text>
+  <text x="520" y="80" font-size="36" fill="#ffd54f">✦</text>
+  <text x="80" y="500" font-size="30" fill="#fff">✧</text>
+  <text x="510" y="510" font-size="34" fill="#fff">✧</text>
+  <text x="40" y="300" font-size="26" fill="#ffe082">✦</text>
+  <text x="540" y="320" font-size="28" fill="#ffe082">✦</text>
+  <!-- Pink hearts -->
+  <path d="M 100 200 C 100 188 112 176 128 188 C 144 176 156 188 156 200 C 156 218 128 240 128 240 C 128 240 100 218 100 200 Z" fill="#e91e63" opacity="0.7"/>
+  <path d="M 440 380 C 440 370 450 360 463 370 C 476 360 486 370 486 380 C 486 395 463 412 463 412 C 463 412 440 395 440 380 Z" fill="#ec407a" opacity="0.7"/>
+  <!-- Crown base -->
+  <rect x="120" y="380" width="360" height="80" rx="10" fill="url(#crown)" stroke="#bf360c" stroke-width="3"/>
+  <rect x="120" y="380" width="360" height="20" fill="#fff59d" opacity="0.5"/>
+  <!-- Crown points -->
+  <path d="M 120 380 L 160 280 L 200 380 Z" fill="url(#crown)" stroke="#bf360c" stroke-width="3"/>
+  <path d="M 200 380 L 250 240 L 300 380 Z" fill="url(#crown)" stroke="#bf360c" stroke-width="3"/>
+  <path d="M 300 380 L 350 200 L 400 380 Z" fill="url(#crown)" stroke="#bf360c" stroke-width="3"/>
+  <path d="M 400 380 L 440 280 L 480 380 Z" fill="url(#crown)" stroke="#bf360c" stroke-width="3"/>
+  <!-- Tip jewels -->
+  <circle cx="160" cy="270" r="14" fill="#e91e63" stroke="#ad1457" stroke-width="2"/>
+  <circle cx="250" cy="225" r="16" fill="#42a5f5" stroke="#0d47a1" stroke-width="2"/>
+  <circle cx="350" cy="185" r="22" fill="#ab47bc" stroke="#4a148c" stroke-width="2"/>
+  <circle cx="440" cy="270" r="14" fill="#66bb6a" stroke="#1b5e20" stroke-width="2"/>
+  <!-- Big front jewel -->
+  <ellipse cx="300" cy="420" rx="48" ry="32" fill="#ec407a" stroke="#880e4f" stroke-width="3"/>
+  <ellipse cx="295" cy="412" rx="18" ry="12" fill="#f8bbd0" opacity="0.7"/>
+  <!-- Small jewels on band -->
+  <circle cx="190" cy="420" r="12" fill="#42a5f5"/>
+  <circle cx="410" cy="420" r="12" fill="#42a5f5"/>
+  <circle cx="150" cy="420" r="8" fill="#fff"/>
+  <circle cx="450" cy="420" r="8" fill="#fff"/>
+  <!-- Sparkle stars on crown -->
+  <text x="225" y="345" font-size="22" fill="#fff">✨</text>
+  <text x="365" y="345" font-size="22" fill="#fff">✨</text>
+</svg>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Ada's Puzzle 🎀</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml" href="images/crown.svg" />
+</head>
+<body>
+  <header>
+    <h1>🎀 Ada's Puzzle 🎀</h1>
+    <p class="tagline">Drag the pieces to make the picture!</p>
+  </header>
+
+  <main>
+    <!-- Welcome / Level pick -->
+    <section id="welcome" class="view">
+      <h2>Pick a puzzle!</h2>
+      <div id="level-list" class="level-list"></div>
+    </section>
+
+    <!-- Game view -->
+    <section id="game" class="view hidden">
+      <div class="game-bar">
+        <button id="back-btn" class="big-btn">← Back</button>
+        <span id="game-title" class="game-title"></span>
+        <span id="game-progress" class="game-progress"></span>
+      </div>
+
+      <div class="play-area">
+        <div id="pieces-left" class="pieces-rail"></div>
+        <div id="board-wrap" class="board-wrap">
+          <div id="board" class="board"></div>
+        </div>
+        <div id="pieces-right" class="pieces-rail"></div>
+      </div>
+
+      <div class="game-buttons">
+        <button id="hint-btn" class="big-btn hint-btn">💡 Hint (5 sec)</button>
+        <button id="shuffle-btn" class="big-btn shuffle-btn">🔀 Shuffle pieces</button>
+      </div>
+    </section>
+
+    <!-- Win view (dancers + button) -->
+    <section id="win" class="view hidden">
+      <h2 class="win-headline">🎉 Yay, Ada! 🎉</h2>
+      <p class="win-sub">You did it!</p>
+      <div id="dancers" class="dancers"></div>
+      <div class="win-buttons">
+        <button id="replay-btn" class="big-btn shuffle-btn">Play again</button>
+        <button id="next-btn" class="big-btn next-btn">Next puzzle ✨</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating background sparkles -->
+  <div class="sparkle s1">✨</div>
+  <div class="sparkle s2">🎀</div>
+  <div class="sparkle s3">💖</div>
+  <div class="sparkle s4">⭐</div>
+  <div class="sparkle s5">🌸</div>
+
+  <script src="game.js"></script>
+</body>
+</html>

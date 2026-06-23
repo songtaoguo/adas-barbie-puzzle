@@ -1,0 +1,279 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+  background: linear-gradient(180deg, #fce4ec 0%, #f8bbd0 60%, #fff 100%);
+  color: #ad1457;
+  text-align: center;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+header { padding: 24px 20px 8px; }
+h1 {
+  font-size: 2.6rem;
+  margin: 0;
+  color: #ad1457;
+  text-shadow: 3px 3px 0 #fff59d;
+}
+.tagline {
+  font-size: 1.1rem;
+  color: #ad1457;
+  margin: 6px 0 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  padding: 0 16px 60px;
+}
+
+.view {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.hidden { display: none !important; }
+
+/* ---------- Level picker ---------- */
+
+.level-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 26px auto;
+  max-width: 760px;
+}
+
+.level-card {
+  background: #fff;
+  border: 5px solid #ec407a;
+  border-radius: 22px;
+  padding: 16px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  color: #ad1457;
+  box-shadow: 0 5px 0 #c2185b;
+  transition: transform 0.1s;
+}
+.level-card:hover { transform: translateY(-3px); }
+.level-card:active { transform: translateY(3px); box-shadow: 0 2px 0 #c2185b; }
+.level-card.completed {
+  background: #c8e6c9;
+  border-color: #66bb6a;
+  box-shadow: 0 5px 0 #2e7d32;
+}
+
+.level-thumb {
+  width: 100%;
+  height: 110px;
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 8px;
+}
+.level-num {
+  display: inline-block;
+  background: #ec407a;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 3px 12px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.level-card.completed .level-num { background: #66bb6a; }
+.level-title { font-size: 1.05rem; font-weight: bold; }
+.level-size { font-size: 0.85rem; color: #6a1b9a; }
+
+/* ---------- Game view ---------- */
+
+.game-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 18px;
+  flex-wrap: wrap;
+}
+.game-title {
+  flex: 1;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #ad1457;
+}
+.game-progress {
+  font-size: 1.05rem;
+  color: #6a1b9a;
+  font-weight: bold;
+}
+
+.play-area {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: start;
+  justify-items: center;
+}
+
+.pieces-rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 6px;
+  padding: 8px;
+  background: rgba(255,255,255,0.55);
+  border: 3px dashed #ec407a;
+  border-radius: 16px;
+  min-height: 200px;
+  width: 100%;
+  max-width: 220px;
+  box-sizing: border-box;
+}
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+}
+.board {
+  background: rgba(255,255,255,0.6);
+  border: 4px solid #ad1457;
+  border-radius: 12px;
+  display: grid;
+  gap: 0;
+  position: relative;
+  box-shadow: 0 6px 0 #880e4f;
+}
+
+/* Each puzzle cell on the board */
+.board-cell {
+  background: rgba(248, 187, 208, 0.3);
+  border: 1px dashed #f48fb1;
+}
+.board-cell.filled { border-color: transparent; }
+
+/* A piece — both on rail and on board */
+.piece {
+  background-repeat: no-repeat;
+  border: 2px solid #ad1457;
+  border-radius: 4px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  touch-action: none;
+}
+.piece.in-rail { position: relative; }
+.piece.in-board { border-color: transparent; box-shadow: none; }
+.piece.dragging {
+  position: fixed !important;
+  z-index: 9999;
+  cursor: grabbing;
+  pointer-events: none;
+  opacity: 0.9;
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+.piece.hint-glow {
+  animation: pulse 0.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,0.7); }
+  50%      { box-shadow: 0 0 0 12px rgba(255,193,7,0); }
+}
+
+/* ---------- Buttons ---------- */
+
+.big-btn {
+  font-family: inherit;
+  font-size: 1.05rem;
+  padding: 12px 22px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  min-height: 44px;
+}
+
+.hint-btn  { background: #fff59d; color: #4a148c; box-shadow: 0 4px 0 #f57f17; }
+.shuffle-btn { background: #ce93d8; color: #fff; box-shadow: 0 4px 0 #6a1b9a; }
+.next-btn { background: #ec407a; color: #fff; box-shadow: 0 4px 0 #880e4f; }
+#back-btn { background: #fff; color: #ad1457; border: 3px solid #ec407a; box-shadow: 0 3px 0 #c2185b; }
+
+.big-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 currentColor; }
+.big-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.game-buttons {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Win view ---------- */
+
+.win-headline {
+  font-size: 3rem;
+  margin: 24px 0 0;
+  color: #ad1457;
+}
+.win-sub { font-size: 1.4rem; color: #ad1457; margin-top: 6px; }
+
+.dancers {
+  position: relative;
+  height: 320px;
+  margin: 30px auto;
+  max-width: 800px;
+}
+.dancer {
+  position: absolute;
+  font-size: 4rem;
+  animation: dance 0.7s ease-in-out infinite;
+}
+@keyframes dance {
+  0%, 100% { transform: translateY(0) rotate(-12deg); }
+  50%      { transform: translateY(-40px) rotate(12deg); }
+}
+
+.win-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+/* ---------- Sparkles in background ---------- */
+
+.sparkle {
+  position: fixed;
+  font-size: 2rem;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+  z-index: 0;
+  opacity: 0.7;
+}
+.s1 { top: 10%; left: 4%; }
+.s2 { top: 70%; left: 90%; animation-delay: 1s; font-size: 2.5rem; }
+.s3 { top: 30%; left: 92%; animation-delay: 2s; font-size: 2.2rem; }
+.s4 { top: 80%; left: 6%; animation-delay: 0.5s; }
+.s5 { top: 20%; left: 95%; animation-delay: 3s; font-size: 1.8rem; }
+
+@keyframes float {
+  0%   { transform: translateY(0)    rotate(-6deg); }
+  50%  { transform: translateY(-22px) rotate(6deg);  }
+  100% { transform: translateY(0)    rotate(-6deg); }
+}
+
+/* ---------- Phone tweaks ---------- */
+
+@media (max-width: 700px) {
+  h1 { font-size: 2rem; }
+  .play-area {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .pieces-rail {
+    max-width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+  }
+}
